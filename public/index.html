@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#111111">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Shorts Swap">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <title>Shorts Swap Studio</title>
+  <style>
+    :root{--bg:#f5f5f7;--panel:#fff;--text:#151515;--muted:#707078;--line:#dedee4;--accent:#111;--danger:#b42318;--ok:#176b3a;--safe:env(safe-area-inset-bottom)}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{background:var(--bg)} body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);padding-bottom:calc(20px + var(--safe))}
+    button,input{font:inherit} button{cursor:pointer}
+    .shell{max-width:1120px;margin:0 auto;padding:18px 14px 48px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+    .brand{display:flex;align-items:center;gap:10px}.logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#111;color:#fff;font-weight:900;font-size:15px}.eyebrow{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    h1{font-size:25px;line-height:1;margin:3px 0 0;letter-spacing:-.03em}.sub{color:var(--muted);font-size:13px;line-height:1.45}
+    .install{display:none;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 11px;font-weight:750;font-size:12px}
+    .grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:0 6px 22px rgba(0,0,0,.04);margin-bottom:14px}
+    h2{font-size:16px;margin:0 0 12px}.step{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:8px;background:#111;color:#fff;font-size:11px;margin-right:7px}
+    .models{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.card{border:2px solid var(--line);border-radius:13px;padding:6px;background:#fff;cursor:pointer;position:relative;overflow:hidden}.card.selected{border-color:#111}.card img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;display:block}.caption{font-size:10px;font-weight:700;margin:7px 2px 2px;line-height:1.25}.check{position:absolute;right:8px;top:8px;width:23px;height:23px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;box-shadow:0 2px 8px #0002}.card:not(.selected) .check{opacity:.35;color:transparent}
+    .upload{margin-top:12px;border:1px dashed #c9c9d0;border-radius:13px;padding:12px;background:#fafafd}.upload strong{font-size:13px}.upload div{font-size:12px;color:var(--muted);margin:3px 0 8px}
+    input[type=file]{width:100%;font-size:12px}input[type=file]::file-selector-button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 10px;margin-right:8px;font-weight:700}
+    .custom-editor{display:none;margin-top:12px}.custom-editor.active{display:block}.canvas-wrap{position:relative;width:100%;max-width:520px;margin:auto;background:#eee;border-radius:13px;overflow:hidden}.canvas-wrap img{width:100%;display:block}.canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}.paint-ui{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}.brush{flex:1;min-width:130px}.help{font-size:11px;color:var(--muted);line-height:1.4;margin-top:7px}
+    .reference{display:grid;grid-template-columns:120px 1fr;gap:11px;align-items:center}.reference img{width:120px;aspect-ratio:1/1;border-radius:12px;object-fit:cover;border:1px solid var(--line)}.reference strong{font-size:13px}.reference p{font-size:12px!important}.divider{height:1px;background:var(--line);margin:15px 0}
+    .toggle-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0}.toggle-row label{font-size:13px;font-weight:750}.toggle-row input{width:20px;height:20px}
+    .button{border:1px solid var(--line);background:#fff;color:#111;border-radius:11px;padding:10px 12px;font-weight:750;font-size:12px}.button.primary{background:#111;color:#fff;border-color:#111;min-height:48px;font-size:14px}.button:disabled{opacity:.45;cursor:not-allowed}.secondary{padding:8px 10px}
+    .status{font-size:12px;min-height:18px}.error{color:var(--danger)}.success{color:var(--ok)}.api-note{font-size:11px;color:var(--muted);line-height:1.45;margin:4px 0 10px}
+    .progress{display:none;margin:10px 0}.progress.active{display:block}.progress-track{height:7px;border-radius:99px;background:#eee;overflow:hidden}.progress-bar{height:100%;width:0;background:#111;border-radius:99px;transition:width .2s}.progress-text{font-size:11px;color:var(--muted);margin-top:5px}
+    .result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.result{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff}.result img{width:100%;display:block;background:#eee}.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px;font-size:11px;font-weight:750}.bar a,.bar button{color:#111;text-decoration:none;border:0;background:#eee;border-radius:8px;padding:7px 8px;font-size:11px;font-weight:800}.collage{margin-top:12px;border:1px solid var(--line);border-radius:13px;overflow:hidden}.collage img{display:block;width:100%}.collage-actions{display:flex;gap:8px;padding:9px;background:#fff}
+    .ios-tip{display:none;border:1px solid #ddd;border-radius:12px;padding:10px;margin-top:10px;font-size:11px;color:var(--muted);background:#fafafa}.hidden{display:none!important}
+    @media(max-width:820px){.grid{grid-template-columns:1fr}.models{grid-template-columns:repeat(2,1fr)}.reference{grid-template-columns:105px 1fr}.reference img{width:105px}.shell{padding-top:12px}}
+    @media(min-width:821px){.shell{padding-top:28px}.panel{padding:18px}}
+    @media(max-width:390px){.reference{grid-template-columns:90px 1fr}.reference img{width:90px}.caption{font-size:9px}.topbar .eyebrow{display:none}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="logo">SS</div><div><div class="eyebrow">Product image editor</div><h1>Shorts Swap</h1></div></div>
+    <button id="installBtn" class="install">＋ Add to Home Screen</button>
+  </header>
+
+  <div class="grid">
+    <main>
+      <section class="panel">
+        <h2><span class="step">1</span>Choose model images</h2>
+        <div id="models" class="models"></div>
+        <div class="upload">
+          <strong>Optional custom model</strong>
+          <div>Upload another model image and paint only the shorts area.</div>
+          <input id="customModelInput" type="file" accept="image/png,image/jpeg,image/webp" capture="environment">
+        </div>
+        <div id="customEditor" class="custom-editor">
+          <div class="canvas-wrap"><img id="customPreview" alt="Custom model preview"><canvas id="maskCanvas"></canvas><canvas id="paintCanvas"></canvas></div>
+          <div class="paint-ui"><label style="font-size:11px;font-weight:750">Brush</label><input id="brushSize" class="brush" type="range" min="8" max="160" value="50"><button id="resetMask" class="button secondary" type="button">Reset</button><button id="removeCustom" class="button secondary" type="button">Remove</button></div>
+          <div class="help">Paint over the shorts only. The red overlay shows the editable region. Pinch/zoom the page if you need more precision.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2><span class="step">2</span>Shorts reference</h2>
+        <div class="reference">
+          <img id="referencePreview" src="/assets/reference-shorts.jpg" alt="Shorts reference">
+          <div><strong>Exact garment reference</strong><p class="sub" style="margin:5px 0 8px">Color, print, pattern, construction and garment details are taken from this image.</p><input id="shortsInput" type="file" accept="image/png,image/jpeg,image/webp" capture="environment"></div>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <section class="panel">
+        <h2><span class="step">3</span>Generate</h2>
+        <div class="toggle-row"><label for="collageToggle">Create local 2×2 collage</label><input id="collageToggle" type="checkbox" checked></div>
+        <p class="api-note">Each selected model is a separate precision edit. The collage is made on your phone/browser and does not use another image-generation call.</p>
+        <button id="generate" class="button primary" style="width:100%">Generate</button>
+        <div id="progress" class="progress"><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div><div id="progressText" class="progress-text"></div></div>
+        <div id="status" class="status"></div>
+        <div id="iosTip" class="ios-tip">On iPhone/iPad: open this site in Safari → Share → Add to Home Screen.</div>
+      </section>
+    </aside>
+  </div>
+
+  <section class="panel">
+    <h2>Results</h2>
+    <div id="results" class="result-grid"></div>
+    <div id="collageBox" class="collage hidden"><img id="collageImage" alt="Generated collage"><div class="collage-actions"><button id="downloadCollage" class="button secondary">Download collage</button><button id="shareCollage" class="button secondary hidden">Share</button></div></div>
+  </section>
+</div>
+<script>
+const MODELS = [
+  {id:'model1',label:'Front / full body',image:'/assets/models/model1.jpg',mask:'/assets/masks/model1.png'},
+  {id:'model2',label:'Side / three-quarter',image:'/assets/models/model2.jpg',mask:'/assets/masks/model2.png'},
+  {id:'model3',label:'Back view',image:'/assets/models/model3.jpg',mask:'/assets/masks/model3.png'},
+  {id:'model4',label:'Front / hand in pocket',image:'/assets/models/model4.jpg',mask:'/assets/masks/model4.png'}
+];
+const state={selected:new Set(MODELS.map(m=>m.id)),customFile:null,results:[],collageUrl:null};
+const $=id=>document.getElementById(id);
+let installPrompt=null, paintingAttached=false;
+
+function init(){
+  renderModels();
+  $('shortsInput').addEventListener('change',previewReference);
+  $('customModelInput').addEventListener('change',handleCustomModel);
+  $('generate').addEventListener('click',generate);
+  $('resetMask').addEventListener('click',resetMask);
+  $('removeCustom').addEventListener('click',removeCustom);
+  $('downloadCollage').addEventListener('click',()=>downloadDataUrl(state.collageUrl,'shorts-swap-collage.png'));
+  $('shareCollage').addEventListener('click',()=>shareDataUrl(state.collageUrl,'shorts-swap-collage.png','Shorts Swap collage'));
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').style.display='block';});
+  $('installBtn').addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').style.display='none';});
+  if(/iPhone|iPad|iPod/i.test(navigator.userAgent)&&!window.navigator.standalone)$('iosTip').style.display='block';
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  if(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone){$('installBtn').style.display='none';}
+}
+
+function renderModels(){
+  $('models').innerHTML=MODELS.map(m=>`<div class="card ${state.selected.has(m.id)?'selected':''}" data-id="${m.id}"><div class="check">✓</div><img src="${m.image}" alt="${m.label}"><div class="caption">${m.id.replace('model','Model ')} · ${m.label}</div></div>`).join('');
+  document.querySelectorAll('.card').forEach(card=>card.addEventListener('click',()=>{const id=card.dataset.id;if(state.selected.has(id))state.selected.delete(id);else state.selected.add(id);renderModels();}));
+}
+function previewReference(e){const f=e.target.files[0];if(f)$('referencePreview').src=URL.createObjectURL(f);}
+async function normalizeImageFile(file,maxDim=1600,quality=.9){
+  const url=URL.createObjectURL(file);const im=new Image();im.src=url;await new Promise((resolve,reject)=>{im.onload=resolve;im.onerror=reject});
+  const scale=Math.min(1,maxDim/Math.max(im.naturalWidth,im.naturalHeight));const w=Math.max(1,Math.round(im.naturalWidth*scale)),h=Math.max(1,Math.round(im.naturalHeight*scale));
+  const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);URL.revokeObjectURL(url);
+  const blob=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',quality));return new File([blob],file.name.replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'});
+}
+async function handleCustomModel(e){
+  const file=e.target.files[0];if(!file)return;state.customFile=await normalizeImageFile(file,1600,.9);$('customEditor').classList.add('active');$('customPreview').src=URL.createObjectURL(state.customFile);await new Promise(r=>$('customPreview').onload=r);setupMaskCanvas($('customPreview').naturalWidth,$('customPreview').naturalHeight);
+}
+function setupMaskCanvas(w,h){
+  const mask=$('maskCanvas'),paint=$('paintCanvas');[mask,paint].forEach(c=>{c.width=w;c.height=h;});
+  const mctx=mask.getContext('2d');mctx.fillStyle='#000';mctx.fillRect(0,0,w,h);paint.getContext('2d').clearRect(0,0,w,h);attachPainting();
+}
+function attachPainting(){
+  if(paintingAttached)return;paintingAttached=true;const paint=$('paintCanvas'),mask=$('maskCanvas');let drawing=false;
+  function pos(e){const r=paint.getBoundingClientRect();return{x:(e.clientX-r.left)*(paint.width/r.width),y:(e.clientY-r.top)*(paint.height/r.height)}}
+  function stroke(e){if(!drawing)return;const p=pos(e),size=Number($('brushSize').value),pctx=paint.getContext('2d'),mctx=mask.getContext('2d');pctx.fillStyle='rgba(255,0,0,.35)';pctx.beginPath();pctx.arc(p.x,p.y,size/2,0,Math.PI*2);pctx.fill();mctx.save();mctx.globalCompositeOperation='destination-out';mctx.beginPath();mctx.arc(p.x,p.y,size/2,0,Math.PI*2);mctx.fill();mctx.restore();}
+  paint.addEventListener('pointerdown',e=>{drawing=true;paint.setPointerCapture(e.pointerId);stroke(e)});paint.addEventListener('pointermove',stroke);paint.addEventListener('pointerup',()=>drawing=false);paint.addEventListener('pointercancel',()=>drawing=false);
+}
+function resetMask(){if($('maskCanvas').width)setupMaskCanvas($('maskCanvas').width,$('maskCanvas').height)}
+function removeCustom(){state.customFile=null;$('customModelInput').value='';$('customEditor').classList.remove('active')}
+async function canvasBlob(canvas){return await new Promise(resolve=>canvas.toBlob(resolve,'image/png'))}
+async function fileFromUrl(url,name){const r=await fetch(url);if(!r.ok)throw new Error('Could not load '+name);return new File([await r.blob()],name,{type:r.headers.get('content-type')||'image/jpeg'})}
+
+async function editOne({id,label,base,mask,shorts}){
+  const fd=new FormData();fd.append('modelId',id);fd.append('baseImage',base,base.name||'base.jpg');fd.append('mask',mask,mask.name||'mask.png');fd.append('shortsReference',shorts,shorts.name||'shorts-reference.jpg');
+  const r=await fetch('/api/edit',{method:'POST',body:fd});const data=await r.json();if(!r.ok)throw new Error(data.error||'Edit failed');return data;
+}
+
+async function generate(){
+  const rawShorts=$('shortsInput').files[0];
+  if(!rawShorts){alert('Upload a shorts reference image first.');return}
+  const shorts=await normalizeImageFile(rawShorts,1600,.9);
+  if(state.selected.size===0&&!state.customFile){alert('Select at least one model or upload a custom model.');return}
+  if(state.customFile&&!$('maskCanvas').width){alert('Paint the custom mask first.');return}
+  $('generate').disabled=true;$('results').innerHTML='';$('collageBox').classList.add('hidden');$('progress').classList.add('active');$('progressBar').style.width='0%';
+  const jobs=[];for(const m of MODELS.filter(x=>state.selected.has(x.id))){jobs.push((async()=>({m,base:await fileFromUrl(m.image,m.id+'.jpg'),mask:await fileFromUrl(m.mask,m.id+'-mask.png')}))())}
+  if(state.customFile)jobs.push(Promise.resolve({m:{id:'custom',label:'Custom model'},base:state.customFile,mask:await canvasBlob($('maskCanvas'))}));
+  try{
+    const prepared=await Promise.all(jobs);let done=0;const total=prepared.length;setProgress(0,total);
+    const settled=await Promise.allSettled(prepared.map(async job=>{const result=await editOne({id:job.m.id,label:job.m.label,base:job.base,mask:job.mask,shorts});done++;setProgress(done,total);return result;}));
+    state.results=settled.map((x,i)=>x.status==='fulfilled'?x.value:{id:prepared[i].m.id,label:prepared[i].m.label,error:x.reason?.message||'Edit failed.'});renderResults();
+    const successful=state.results.filter(x=>x.image);const failed=state.results.filter(x=>x.error);$('status').innerHTML=failed.length?`<span class="error">${successful.length} generated · ${failed.length} failed.</span>`:`<span class="success">${successful.length} image(s) generated.</span>`;
+    if($('collageToggle').checked&&successful.length>=2)await createCollage(successful.slice(0,4));
+  }catch(e){$('status').innerHTML=`<span class="error">${e.message}</span>`}finally{$('generate').disabled=false;$('progress').classList.remove('active')}
+}
+function setProgress(done,total){$('progressBar').style.width=Math.round((done/Math.max(total,1))*100)+'%';$('progressText').textContent=`Generating ${done} of ${total}…`}
+function renderResults(){
+  $('results').innerHTML=state.results.map(r=>r.image?`<div class="result"><img src="${r.image}" alt="${r.label}"><div class="bar"><span>${r.label}</span><div style="display:flex;gap:5px"><a href="${r.image}" download="${r.id}-shorts-swap.png">Save</a><button data-share="${r.id}">Share</button></div></div></div>`:`<div class="result"><div class="bar"><span>${r.label}</span><span class="error">${r.error}</span></div></div>`).join('');
+  document.querySelectorAll('[data-share]').forEach(b=>b.addEventListener('click',()=>{const r=state.results.find(x=>x.id===b.dataset.share);shareDataUrl(r.image,`${r.id}-shorts-swap.png`,`Shorts Swap — ${r.label}`)}));
+}
+async function createCollage(items){
+  const imgs=await Promise.all(items.map(i=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=i.image})));
+  const w=1200,h=1200,g=12,cellW=(w-g)/2,cellH=(h-g)/2,c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='#eee';ctx.fillRect(0,0,w,h);
+  imgs.forEach((im,i)=>{const x=(i%2)*(cellW+g),y=Math.floor(i/2)*(cellH+g),s=Math.min(cellW/im.width,cellH/im.height),dw=im.width*s,dh=im.height*s;ctx.drawImage(im,x+(cellW-dw)/2,y+(cellH-dh)/2,dw,dh)});
+  state.collageUrl=c.toDataURL('image/png');$('collageImage').src=state.collageUrl;$('collageBox').classList.remove('hidden');if(navigator.share)$('shareCollage').classList.remove('hidden');
+}
+function dataUrlBlob(dataUrl){const [h,b]=dataUrl.split(',');const mime=h.match(/:(.*?);/)[1],bin=atob(b),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return new Blob([arr],{type:mime})}
+function downloadDataUrl(url,name){if(!url)return;const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove()}
+async function shareDataUrl(url,name,title){if(!url)return;if(!navigator.share){downloadDataUrl(url,name);return}try{const file=new File([dataUrlBlob(url)],name,{type:'image/png'});if(navigator.canShare&&!navigator.canShare({files:[file]}))return downloadDataUrl(url,name);await navigator.share({title,files:[file]})}catch(e){}}
+init();
+</script>
+</body>
+</html>

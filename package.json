@@ -1,0 +1,17 @@
+{
+  "name": "shorts-swap-studio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx netlify dev",
+    "dev": "npx netlify dev"
+  },
+  "dependencies": {
+    "openai": "^6.17.0",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "netlify-cli": "^23.7.0"
+  }
+}
